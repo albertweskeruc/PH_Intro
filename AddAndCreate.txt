@@ -1,0 +1,27 @@
+AddAndCreate.php
+
+<?php session_start();?>
+<!DOCTYPE html>
+<html>
+<body>
+<h1>Got it Boss, Any more Patients to add? (v^.^)/ <br> </h1>
+<h1> Enter Another Patient or Create Schedule When Finished </h1>
+
+<?php //add more patient appointment data ?>
+<h2>Add Patient Info for Scheduler</h2>
+<form action="ProcessData.php", method=post>
+Patient Name:      <input type="text" name="Patient_Name"><br>
+Address:           <input type="text" name="Address"><br>
+Time Constraits:   <input type="text" name="Time_Constraits"><br>
+New Patient?:      <input type="checkbox" name="NewORNot" value="New"><br>
+<p/>
+<input type="submit" value="Add Patient">
+</form>
+ <?php //When user finishes adding all the appointments, this button will lead them to their created schedule?>
+ 
+<h3>Finish Adding? Create Schedule Here</h3>
+<form action="Schedule.php", method=post>
+<input type="submit" value="Create Schedule">
+</form>
+</body>
+</html>

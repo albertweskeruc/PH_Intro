@@ -1,0 +1,244 @@
+Optimize.php
+
+<?php session_start();?>
+<?php
+// get number of elements in array
+$length = count($_SESSION['PBlock']);
+
+//optimize sorting method based on travel time between index i and all the values to the right of i and placing the index with
+//the minimum travel distance to i into the i+1 index
+for($i = 0; $i < $length; $i++){
+    $tempMin = 100;
+    for($j = ($i+1); $j<$length; $j++ ){
+        //get distance value and compare
+        $temp1 = $_SESSION['PBlock'][$i];
+        $temp2 = $_SESSION['PBlock'][$j];
+        
+        $X = (temp1[0] - $temp2[0]);
+        $Y = (temp1[1] - $temp2[1]);
+        
+        $distance= sqrt( ($X**2) + ($Y**2) );
+        $distance = $distance * 2;
+        $distance = ceil($distance);
+        
+        //if the distance is smaller than tempMin, swap all values from all arrays between index j and index i+1 and recaluate neccessary attributes
+        if($tempMin > $distance){
+            //place the new distance time
+            $tempMin = $distance;
+            $_SESSION['PTtime'][($i+1)] = $distance;
+            //swap coordinate values
+            $HoldThis =  $_SESSION['PBlock'][($i+1)];  
+            $_SESSION['PBlock'][($i+1)] = $_SESSION['PBlock'][$j];
+            $_SESSION['PBlock'][$j] = $HoldThis;
+            //swap name values
+            $HoldThis =  $_SESSION['PName'][($i+1)];
+            $_SESSION['PName'][($i+1)] = $_SESSION['PName'][$j];
+            $_SESSION['PName'][$j] = $HoldThis;
+            //swap address values
+            $HoldThis =  $_SESSION['PAddress'][($i+1)];
+            $_SESSION['PAddress'][($i+1)] = $_SESSION['PAddress'][$j];
+            $_SESSION['PAddress'][$j] = $HoldThis;
+            //Swap special request values
+            $HoldThis =  $_SESSION['PSpecial'][($i+1)];
+            $_SESSION['PSpecial'][($i+1)] = $_SESSION['PSpecial'][$j];
+            $_SESSION['PSpecial'][$j] = $HoldThis;
+           //swap patient new/existing status
+            $HoldThis =  $_SESSION['PNew'][($i+1)];
+            $_SESSION['PNew'][($i+1)] = $_SESSION['PNew'][$j];
+            $_SESSION['PNew'][$j] = $HoldThis;
+            
+            
+            //Calculate NEW start and end time then create the NEW appointment time format since positions, patient time, and travel time have changed
+            
+                //implement logic to create start and end time based on quarter of an hour / every 15 minutes
+                $find_start = ($distance + $_SESSION['PEtime'][$i]) % 15;
+                
+                if($find_start != 0){
+                    $new_start = (15 - $find_start) + ($distance + $_SESSION['PEtime'][$i]);
+                    
+                }
+                else{
+                    $new_start = ($distance + $_SESSION['PEtime'][$i]);
+                }
+                
+                //get the length of visit from the new variable paced in index i+1
+                if($_SESSION['PNew'][$i+1] == 'New'){
+               
+                $time_frame = 90;
+                 }
+                else{
+                 
+                 $time_frame = 30;
+                 }
+                 
+                $new_end = $new_start + $time_frame;
+            
+            //create schedule based on regular time
+            $track_start = $new_start;
+            $track_end =  $new_end;
+            $H_S = 0;
+            $M_S = 0;
+            $H_E = 0;
+            $M_E = 0;
+            //get start time converted first
+            //start hour
+            while($track_start != 0 && ($track_start - 60) >= 0 ){
+                $track_start = $track_start - 60;
+                $H_S++;
+            }
+            //start minute
+            while($track_start != 0){
+                $track_start = $track_start - 15;
+                $M_S++;
+            }
+            //end hour
+            while($track_end != 0 && ($track_end - 60) >= 0 ){
+                $track_end = $track_end - 60;
+                $H_E++;
+            }
+            //end minute
+            while($track_end != 0){
+                $track_end = $track_end - 15;
+                $M_E++;
+            }
+            //time to create the time format!!!
+            
+            //Am hour for start
+            if($H_S < 3){
+                switch ($H_S) {
+                    case "0": // 9am
+                        $Part1H = "9";
+                        $Part1S = $M_S * 15;
+                        $day1 = "am";
+                        break;
+                    case "1": //10am
+                        $Part1H = "10";
+                        $Part1S = $M_S * 15;
+                        $day1 = "am";
+                        break;
+                    case "2": //11am
+                        $Part1H = "11";
+                        $Part1S = $M_S * 15;
+                        $day1 = "am";
+                        break;
+                }
+            }
+            //pm hour for start
+            else{
+                switch ($H_S) {
+                    case "3"://12pm
+                        $Part1H = "12";
+                        $Part1S = $M_S * 15;
+                        $day1 = "pm";
+                        break;
+                    case "4"://1pm
+                        $Part1H = "1";
+                        $Part1S = $M_S * 15;
+                        $day1 = "pm";
+                        break;
+                    case "5": //2pm
+                        $Part1H = "2";
+                        $Part1S = $M_S * 15;
+                        $day1 = "pm";
+                        break;
+                    case "6": //3pm
+                        $Part1H = "3";
+                        $Part1S = $M_S * 15;
+                        $day1 = "pm";
+                        break;
+                    case "7": //4pm
+                        $Part1H = "4";
+                        $Part1S = $M_S * 15;
+                        $day1 = "pm";
+                        break;
+                    case "8": //5pm
+                        $Part1H = "5";
+                        $Part1S = $M_S * 15;
+                        $day1 = "pm";
+                        break;
+                    case "9": //6pm
+                        $Part1H = "6";
+                        $Part1S = $M_S * 15;
+                        $day1 = "pm";
+                        break;
+                        
+                        
+                }
+            }
+            
+            //Am hour for end
+            if($H_E < 3){
+                switch ($H_E) {
+                    case "0"://9am
+                        $Part2H = "9";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Am";
+                        break;
+                    case "1"://10am
+                        $Part2H = "10";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Am";
+                        break;
+                    case "2"://11am
+                        $Part2H = "11";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Am";
+                        break;
+                        
+                }
+            }
+            //pm hour end
+            else{
+                switch ($H_E) {
+                    case "3"://12pm
+                        $Part2H = "12";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Pm";
+                        break;
+                    case "4"://1pm
+                        $Part2H = "1";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Pm";
+                        break;
+                    case "5": //2pm
+                        $Part2H = "2";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Pm";
+                        break;
+                    case "6": //3pm
+                        $Part2H = "3";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Pm";
+                        break;
+                    case "7": //4pm
+                        $Part2H = "4";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Pm";
+                        break;
+                    case "8": //5pm
+                        $Part2H = "5";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Pm";
+                        break;
+                    case "9": //6pm
+                        $Part2H = "6";
+                        $Part2S = $M_E * 15;
+                        $day2 = "Pm";
+                        break;
+                }
+                
+            }
+            
+            $new_appointment = $Part1H.":".$Part1S.$day1." - ".$Part2H.":".$Part2S.$day2;
+            
+            //save new times created in the index i+1
+            $_SESSION['PStime'][($i+1)] = $new_start;
+            $_SESSION['PEtime'][($i+1)] = $new_end;
+            $_SESSION['PAppointment'][($i+1)] = $new_appointment;
+        }
+    }
+    
+}
+header("Location: Schedule.php");
+exit;
+?>

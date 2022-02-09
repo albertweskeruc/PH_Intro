@@ -1,0 +1,27 @@
+PatientInfo.php
+
+<?php session_start();?>
+<?php
+$PAppointment = array();
+$PStime = array();
+$PEtime = array();
+$PTtime = array();
+$PName = array();
+$PAddress = array();
+$PSpecial = array();
+$PNew = array();
+$PBlock = array();
+$Create = true;
+$_SESSION['PAppointment'] = $PAppointment; // String of the appointment created from Start and end time 
+$_SESSION['PStime'] = $PTime;       #array for start time of appointment
+$_SESSION['PEtime'] = $PTime;       #array for end time of appointment
+$_SESSION['PTtime'] = $PTime;      //array for travel time
+$_SESSION['PBlock'] = $PBlock;     //array for map coordinate
+$_SESSION['PName'] = $PName;       //array of patient names
+$_SESSION['PAddress'] = $PAddress; //array of patient address
+$_SESSION['PSpecial'] = $PSpecial; //array of perferred times
+$_SESSION['PNew'] = $PNew;         //array of status of patient if they are new or not
+$_SESSION['Create'] = $Create;     //variable that sets to true so that the arrays dont initilize again
+header("Location: AddAndCreate.php");
+exit;
+?>

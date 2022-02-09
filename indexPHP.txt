@@ -1,0 +1,33 @@
+index.php
+
+<?php
+//will initilize the arrays that the schedule will utilize to create the schedule in the end
+//and keep track of all patient appointment values until user finishes adding and creates schedule 
+?>
+
+<?php session_start();?>
+<?php if($_SESSION['Create'] == null)
+    header("Location: PatientInfo.php");
+ ?>
+<!DOCTYPE html>
+<html>
+<body>
+
+<h1>Welcome Back Boss! (v^.^)/ <br></h1>
+
+<h1> Enter Patient Appointment Info To Create Tomorrow's Schedule <br> </h1>
+
+<?php
+//Must add at least one patient appointment data in order to get to the option to create a schedule
+?>
+<h3>Add Patient Info for Scheduler</h3>
+<form action="ProcessData.php", method=post>
+Patient Name:      <input type="text" name="Patient_Name"><br>
+Address:           <input type="text" name="Address"><br>
+Time Constraits:   <input type="text" name="Time_Constraits"><br>
+New Patient?:      <input type="checkbox" name="NewORNot" value="New"><br>
+<p/>
+<input type="submit" value="Add Patient">
+</form>
+</body>
+</html>

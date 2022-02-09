@@ -1,0 +1,66 @@
+Schedule.php
+
+<?php session_start();?>
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+table, th, td {
+  border: 1px solid black;
+}
+</style>
+</head>
+<body>
+
+<h2>Here is your Schedule Boss (v^.^)/</h2>
+
+<h1>Schedule Draft for Tomorrow</h1>
+<table align="left" border="1" cellpadding="3" cellspacing="0" style="width:100%">
+<?php
+$length = count($_SESSION['PName']);
+for($i=0;$i<$length;$i++)
+{
+echo "<tr>";
+for ($j=1;$j<=7;$j++)
+  {
+     switch ($j) {
+          case "1":
+              echo "<td>Appointment time:".$_SESSION['PAppointment'][$i]."</td>";
+              break;
+          case "2":
+              echo "<td>Patient Name: ".$_SESSION['PName'][$i]."</td>";
+              break;
+          case "3":
+              echo "<td>Address: ".$_SESSION['PAddress'][$i]."</td>";
+              break;
+          case "4":
+              echo "<td>Travel Time: = ".$_SESSION['PTtime'][$i]."</td>";
+              break;
+          case "5":
+              echo "<td>Perferred Time: = ".$_SESSION['PSpecial'][$i]."</td>";
+              break;
+          case "6":
+              echo "<td>Client Status: ".$_SESSION['PNew'][$i]."</td>";
+              break;
+          default:
+              echo "<td>Delete Patient"?> <html><form action="Delete.php", method=post><input type="submit" name="Delete" value="<?php echo $i ?>" /></form></html>
+               <?php "</td>";
+     }
+  }
+  echo "</tr>";
+  }
+?>
+
+</table>
+<form action="Optimize.php", method=post>
+<input type="submit" value="Optimize">
+</form>
+<p/>
+<br>
+<h3>Want to make another Schedule? This way to fresh start</h3>
+<form action="Index.php", method=post>
+<input type="submit" value="MakeAnotherSchedule">
+</form>
+
+</body>
+</html>

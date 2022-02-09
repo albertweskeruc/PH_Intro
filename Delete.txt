@@ -1,0 +1,22 @@
+Delete.php
+
+<?php session_start();?>
+<?php
+//delete by index 
+$del = $_POST['Delete'];
+
+//array splice is great to be used as removing a value from a certain index and then the method will 
+//reindex/update the array afterwards. No null value will be left where the splice/deletion happened
+
+array_splice($_SESSION['PStime'], $del, 1);
+array_splice($_SESSION['PEtime'], $del, 1);
+array_splice($_SESSION['PAppointment'], $del, 1);
+array_splice($_SESSION['PTtime'], $del, 1);
+array_splice($_SESSION['PBlock'], $del, 1);
+array_splice($_SESSION['PName'], $del, 1);
+array_splice($_SESSION['PAddress'], $del, 1);
+array_splice($_SESSION['PSpecial'], $del, 1);
+array_splice($_SESSION['PNew'], $del, 1);
+header("Location: Schedule.php");
+exit;
+?>
